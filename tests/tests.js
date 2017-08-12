@@ -31,7 +31,7 @@ describe('furck', () => {
     })
   })
 
-  it('dir references are honoured in logs', () => {
+  it('directory refs are honoured in error', () => {
     return fork('./tests/worker/').catch((err) => {
       expect(err.message).toContain('worker/index.js exited')
     })
