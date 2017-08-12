@@ -1,0 +1,30 @@
+{
+  "name": "furck",
+  "version": "1.0.0",
+  "description": "what the fork? a simple child_process.fork wrapper",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "prepublishOnly": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/sdgluck/furck"
+  },
+  "keywords": [
+    "fork",
+    "child",
+    "process",
+    "child_process",
+    "promise",
+    "spongebob"
+  ],
+  "author": "Sam Gluck <sdgluck@gmail.com>",
+  "license": "MIT",
+  "jest": {
+    "testRegex": "tests.js"
+  },
+  "devDependencies": {
+    "jest": "20.0.4"
+  }
+}
