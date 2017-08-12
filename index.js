@@ -23,7 +23,7 @@ module.exports = function furck (file, args, opts) {
 
   const promise = new Promise((res, rej) => {
     child
-      .on('error', (err) => rej(err))
+      .on('error', rej)
       .on('exit', (code, signal) => {
         if (code || signal) var basename = path.basename(file)
         if (code) return rej(new Error(`${basename} exited with error code ${code}`))

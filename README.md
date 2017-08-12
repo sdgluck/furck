@@ -38,7 +38,8 @@ Fork `file` as a child process.
 
 Returns a Promise that...
 - resolves when the process exists cleanly
-- rejected when the process errors or exits with code > 0
+- rejected when the process errors or exits with code > 0 
+<br/>(e.g. uncaught exceptions, unhandled rejections)
 
 ## Example
 

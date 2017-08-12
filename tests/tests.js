@@ -18,6 +18,12 @@ describe('furck', () => {
       expect(err.message).toContain('unhandled-rejection.js exited')
     })
   })
+  
+  it('catches bad exit', () => {
+    return fork('./tests/bad-worker').catch((err) => {
+      expect(err.message).toContain('bad-worker.js exited')
+    })
+  })
 
   it('gets messages', (done) => {
     const child = fork('./tests/good-worker')
