@@ -2,7 +2,9 @@
 
 > :fork_and_knife: what the fork?
 
-a simple child_process.fork wrapper
+Made with ❤ at [@outlandish](http://www.twitter.com/outlandish)
+
+A simple child_process.fork wrapper:
 
 - promisified child process execution
 - identifies "cannot find module" errors in silent mode
