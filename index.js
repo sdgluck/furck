@@ -13,7 +13,7 @@ module.exports = function furck (file, args, opts) {
 
   file = path.isAbsolute(file) ? file : path.resolve(process.cwd(), file)
   args = args || []
-  opts = Object.assign({}, opts, {silent: true})
+  opts = Object.assign({silent: true}, opts)
 
   if (file.indexOf('.js') !== file.length - 3) {
     file += '.js'
