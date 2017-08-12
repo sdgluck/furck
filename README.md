@@ -4,6 +4,9 @@
 
 a simple child_process.fork wrapper
 
+- promisified child process execution
+- identifies "cannot find module" errors in silent mode
+
 ## Install
 
 ```sh
@@ -60,7 +63,7 @@ process.on('message', (m) => {
     process.exit(0)
   }
 })
-````
+```
 
 ## Contributing
 

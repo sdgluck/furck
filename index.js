@@ -21,15 +21,29 @@ module.exports = function furck (file, args, opts) {
 
   const child = fork(file, args, opts)
 
-  const promise = new Promise((res, rej) => {
-    child
-      .on('error', rej)
-      .on('exit', (code, signal) => {
-        if (code || signal) var basename = path.basename(file)
-        if (code) return rej(new Error(`${basename} exited with error code ${code}`))
-        if (code === null && signal) return rej(new Error(`${basename} exited because ${signal}`))
-        res()
-      })
+  let resolve, reject, promise = new Promise((res, rej) => {
+    resolve = res
+    reject = rej
+
+    child.on('error', reject)
+
+    child.on('exit', (code, signal) => {
+      if (code || signal) {
+        const basename = path.basename(file)
+
+        if (code) {
+          reject(new Error(`${basename} exited with error code ${code}`))
+          return
+        }
+
+        if (code === null && signal) {
+          reject(new Error(`${basename} exited because ${signal}`))
+          return
+        }
+      }
+
+      resolve()
+    })
   })
 
   promise.process = child
@@ -42,6 +56,19 @@ module.exports = function furck (file, args, opts) {
   promise.send = (message) => {
     child.send(message)
     return promise
+  }
+
+  if (opts.silent) {
+    child.stdout.on('stdout', (data) => {
+      child.emit('stdout', data)
+    })
+
+    child.stderr.on('data', (data) => {
+      if (String(data).indexOf(`Cannot find module '${file}'`) > -1) {
+        reject(new Error(`Cannot find module '${file}'`))
+      }
+      child.emit('stderr', data)
+    })
   }
 
   return promise

@@ -7,6 +7,12 @@ describe('furck', () => {
     expect(() => fork('.', [], 1)).toThrowError(/expecting opts/)
   })
 
+  it('catches cannot find module', () => {
+    return fork('./spongebob.js').catch((err) => {
+      expect(err.message).toContain('Cannot find module')
+    })
+  })
+
   it('catches uncaught exception', () => {
     return fork('./tests/uncaught-exception').catch((err) => {
       expect(err.message).toContain('uncaught-exception.js exited')
@@ -18,7 +24,7 @@ describe('furck', () => {
       expect(err.message).toContain('unhandled-rejection.js exited')
     })
   })
-  
+
   it('catches bad exit', () => {
     return fork('./tests/bad-worker').catch((err) => {
       expect(err.message).toContain('bad-worker.js exited')
