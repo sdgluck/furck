@@ -15,8 +15,17 @@ module.exports = function furck (file, args, opts) {
   args = args || []
   opts = Object.assign({silent: true}, opts)
 
+  let basename = path.basename(file)
+
+  // fiddle with the file path so logs are more clear
   if (file.indexOf('.js') !== file.length - 3) {
-    file += '.js'
+    if (fs.existsSync(file + '.js')) {
+      file += '.js'
+      basename = path.basename(file)
+    } else {
+      const split = file.split(path.sep)
+      basename = split[split.length - 1].replace(/\\$/) + '/index.js'
+    }
   }
 
   const child = fork(file, args, opts)
@@ -29,8 +38,6 @@ module.exports = function furck (file, args, opts) {
 
     child.on('exit', (code, signal) => {
       if (code || signal) {
-        const basename = path.basename(file)
-
         if (code) {
           reject(new Error(`${basename} exited with error code ${code}`))
           return

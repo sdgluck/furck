@@ -6,6 +6,8 @@ Made with ❤ at [@outlandish](http://www.twitter.com/outlandish)
 
 A simple child_process.fork wrapper:
 
+- super simple API
+- better error reporting
 - promisified child process execution
 - identifies "cannot find module" errors in silent mode
 

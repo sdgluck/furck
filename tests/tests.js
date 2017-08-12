@@ -31,6 +31,12 @@ describe('furck', () => {
     })
   })
 
+  it('dir references are honoured in logs', () => {
+    return fork('./tests/worker/').catch((err) => {
+      expect(err.message).toContain('worker/index.js exited')
+    })
+  })
+
   it('gets messages', (done) => {
     const child = fork('./tests/good-worker')
 
