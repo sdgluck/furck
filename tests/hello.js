@@ -1,0 +1,3 @@
+setTimeout(() => {
+  process.send('hello')
+})

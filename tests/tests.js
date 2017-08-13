@@ -37,6 +37,22 @@ describe('furck', () => {
     })
   })
 
+  it('kills process', (done) => {
+    const child = fork('./tests/hello')
+    let gotMessage = false
+
+    child.on('message', () => {
+      gotMessage = true
+    })
+
+    setTimeout(() => {
+      expect(gotMessage).toBe(false)
+      done()
+    }, 500)
+
+    child.kill()
+  })
+
   it('gets messages', (done) => {
     const child = fork('./tests/good-worker')
 
