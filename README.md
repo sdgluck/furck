@@ -10,6 +10,7 @@ A simple child_process.fork wrapper:
 - better error reporting
 - promisified child process execution
 - identifies "cannot find module" errors in silent mode
+- execution resolves to last message for "one-off" jobs
 
 ## Install
 
@@ -43,12 +44,19 @@ Fork `file` as a child process.
 - __args__ {Array} (optional) child_process args array
 - __opts__ {Object} (optional) child_process options object
 
-Returns a Promise that...
-- resolves when the process exists cleanly
+Returns a "fork" (enhanced Promise) that...
+- resolves with last message received (if the process exists cleanly)
 - rejected when the process errors or exits with code > 0 
 <br/>(e.g. uncaught exceptions, unhandled rejections)
 
-## Example
+### API
+
+- `fork.send(data)` send data to the child process
+- `fork.on(event, fn)` hook into an event (e.g. `message`)
+- `fork.kill([signal])` kill the process (signal default: `SIGINT`) (returns a Promise)
+- `fork.process` underlying child process
+
+#### Example
 
 ```js
 // master.js

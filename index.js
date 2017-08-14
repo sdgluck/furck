@@ -1,19 +1,18 @@
-const fork = require('child_process').fork
+const {fork} = require('child_process')
+const assert = require('argsy')
 const path = require('path')
 const fs = require('fs')
 
-module.exports = function furck (file, args, opts) {
-  if (typeof file !== 'string' || !file.length) {
-    throw new Error('expecting file to be non-empty string')
-  } else if (args && !Array.isArray(args)) {
-    throw new Error('expecting args to be array')
-  } else if (opts && typeof opts !== 'object') {
-    throw new Error('expecting opts to be object')
-  }
+module.exports = function furck (file, args = [], opts = {}) {
+  assert('furck')
+    .nonEmptyStr(file, 'file')
+    .arr(args, 'args')
+    .obj(opts, 'opts')
+    .$eval()
 
-  file = path.isAbsolute(file) ? file : path.resolve(process.cwd(), file)
-  args = args || []
+  file = path.resolve(process.cwd(), file)
   opts = Object.assign({silent: true}, opts)
+  args = args || []
 
   let basename = path.basename(file)
 
@@ -30,13 +29,18 @@ module.exports = function furck (file, args, opts) {
 
   const child = fork(file, args, opts)
 
+  let lastMessage = null
+
   let resolve, reject, promise = new Promise((res, rej) => {
     resolve = res
     reject = rej
 
-    child.on('error', reject)
+    child
+      .on('message', (msg) => lastMessage = msg)
+      .on('error', reject)
+      .on('exit', onExit)
 
-    child.on('exit', (code, signal) => {
+    function onExit (code, signal) {
       if (code || signal) {
         if (code) {
           reject(new Error(`${basename} exited with error code ${code}`))
@@ -49,18 +53,18 @@ module.exports = function furck (file, args, opts) {
         }
       }
 
-      resolve()
-    })
+      resolve(lastMessage)
+    }
   })
 
   promise.process = child
 
-  promise.kill = () => {
+  promise.kill = (signal = 'SIGINT') => {
     if (opts.silent) {
       child.stdout.pause()
       child.stderr.pause()
     }
-    process.kill(child.pid)
+    process.kill(child.pid, signal)
   }
 
   promise.on = function () {

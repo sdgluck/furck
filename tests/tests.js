@@ -1,4 +1,4 @@
-const fork = require('../')
+const fork = require('../index')
 
 describe('furck', () => {
   it('throws with bad args', () => {
@@ -37,31 +37,37 @@ describe('furck', () => {
     })
   })
 
-  it('kills process', (done) => {
+  it('kills process', () => {
     const child = fork('./tests/hello')
     let gotMessage = false
 
-    child.on('message', () => {
-      gotMessage = true
+    child.on('message', (message) => {
+      gotMessage = message
     })
 
-    setTimeout(() => {
-      expect(gotMessage).toBe(false)
-      done()
-    }, 500)
+    child.kill() // 'SIGINT'
 
-    child.kill()
+    return child
+      .then(() => expect(gotMessage).toBe('hello'))
+      .catch((err) => expect(err.message).toContain('exited with error code 1'))
   })
 
-  it('gets messages', (done) => {
-    const child = fork('./tests/good-worker')
+  it('gets messages', () => {
+    return fork('./tests/good-worker')
+      .on('message', (message) => {
+        expect(message).toBe('squarepants')
+      })
+      .send('spongebob')
+  })
 
-    child.on('message', (message) => {
-      if (message === 'squarepants') {
-        done()
-      }
-    })
-
-    child.send('spongebob')
+  it('resolves to last message', () => {
+    return fork('./tests/good-worker')
+      .send('spongebob')
+      .then((message) => {
+        expect(message).toBe('squarepants')
+      })
+      .catch((err) => {
+      console.log(err)
+      })
   })
 })
