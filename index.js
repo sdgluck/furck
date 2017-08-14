@@ -55,12 +55,12 @@ module.exports = function furck (file, args, opts) {
 
   promise.process = child
 
-  promise.kill = () => {
+  promise.kill = (signal = 'SIGINT') => {
     if (opts.silent) {
       child.stdout.pause()
       child.stderr.pause()
     }
-    process.kill(child.pid)
+    process.kill(child.pid, signal)
   }
 
   promise.on = function () {

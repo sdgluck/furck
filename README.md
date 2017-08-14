@@ -43,12 +43,19 @@ Fork `file` as a child process.
 - __args__ {Array} (optional) child_process args array
 - __opts__ {Object} (optional) child_process options object
 
-Returns a Promise that...
+Returns a "fork" (enhanced Promise) that...
 - resolves when the process exists cleanly
 - rejected when the process errors or exits with code > 0 
 <br/>(e.g. uncaught exceptions, unhandled rejections)
 
-## Example
+### API
+
+- `fork.send(data)` send data to the child process
+- `fork.on(event, fn)` hook into an event (e.g. `message`)
+- `fork.kill([signal])` kill the process (signal default: `SIGINT`) (returns a Promise)
+- `fork.process` underlying child process
+
+#### Example
 
 ```js
 // master.js
