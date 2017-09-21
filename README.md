@@ -1,16 +1,25 @@
-# furck
+<p align="center">
+  <img src="https://github.com/sdgluck/furck/blob/master/assets/fork.png" />
+</p>
 
-> :fork_and_knife: what the fork?
+<p><h1 align="center">furck</h1></p>
 
-Made with ❤ at [@outlandish](http://www.twitter.com/outlandish)
+<p align="center">What the fork?</p>
 
-A simple child_process.fork wrapper:
+<p align="center">Made with ❤ at <a href="http://www.twitter.com/outlandish">@outlandish</a></p>
+  
+<p align="center">
+    <a href="http://badge.fury.io/js/furck"><img alt="npm version" src="https://badge.fury.io/js/furck.svg" /></a>
+</p>
 
-- super simple API
-- better error reporting
+<hr/>
+
+A simple child_process.fork wrapper...
+
 - promisified child process execution
+- better error reporting
 - identifies "cannot find module" errors in silent mode
-- execution resolves to last message for "one-off" jobs
+- resolves to last message for "one-off" jobs
 
 ## Install
 
